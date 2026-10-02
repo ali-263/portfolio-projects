@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMW Performance Showcase</title>
+    <style>
+        /* ================= GLOBAL STYLES ================= */
+        :root {
+            --bg-color: #0b0c10;
+            --card-bg: #1f2833;
+            --accent-blue: #0066b1; /* BMW M Blue */
+            --accent-red: #e02424;  /* BMW M Red */
+            --text-main: #ffffff;
+            --text-muted: #c5c6c7;
+            --border-color: #333d47;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 5%;
+            background: rgba(11, 12, 16, 0.95);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid var(--accent-blue);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: var(--text-main);
+        }
+
+        .logo span {
+            color: var(--accent-blue);
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-right: 1.5rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--accent-blue);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 65vh;
+            background: linear-gradient(180deg, rgba(11,12,16,0.5) 0%, var(--bg-color) 100%),
+                        url('https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 1rem;
+        }
+
+        .hero h1 {
+            font-size: 3.2rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.8);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+        }
+
+        /* Section Titles */
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin: 4rem 0 1.5rem 0;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: var(--accent-blue);
+            margin: 0.5rem auto 0 auto;
+            border-radius: 2px;
+        }
+
+        /* Filter Controls */
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: transparent;
+            border: 2px solid var(--accent-blue);
+            color: var(--text-main);
+            padding: 0.6rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--accent-blue);
+            box-shadow: 0 0 15px rgba(0, 102, 177, 0.6);
+        }
+
+        /* Cars Grid */
+        .cars-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 0 5%;
+        }
+
+        .car-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .car-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 20px rgba(0, 102, 177, 0.3);
+        }
+
+        .car-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .car-details {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .car-title {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .car-specs {
+            list-style: none;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .car-specs li {
+            margin-bottom: 0.3rem;
+        }
+
+        .price-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--accent-blue);
+        }
+
+        .btn-buy {
+            background-color: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .btn-buy:hover {
+            background-color: #004b82;
+        }
+
+        /* ================= FAQ SECTION ================= */
+        .faq-section {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 5%;
+        }
+
+        .faq-item {
+            background-color: var(--card-bg);
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .faq-question {
+            padding: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            transition: background 0.2s;
+        }
+
+        .faq-question:hover {
+            background-color: rgba(0, 102, 177, 0.2);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            color: var(--text-muted);
+            padding: 0 1.2rem;
+            background-color: #171e27;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 150px;
+            padding: 1.2rem;
+        }
+
+        .faq-item.active .faq-toggle {
+            transform: rotate(180deg);
+        }
+
+        .faq-toggle {
+            transition: transform 0.3s;
+        }
+
+        /* ================= CONTACT SECTION ================= */
+        .contact-section {
+            max-width: 800px;
+            margin: 0 auto 5rem auto;
+            padding: 2rem;
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        .form-group input, 
+        .form-group textarea {
+            padding: 0.8rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus, 
+        .form-group textarea:focus {
+            border-color: var(--accent-blue);
+        }
+
+        .btn-submit {
+            background-color: var(--accent-blue);
+            color: white;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-submit:hover {
+            background-color: #004b82;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background-color: #050507;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.2rem; }
+            .cars-container { grid-template-columns: 1fr; }
+            nav { display: none; } /* Simplified for demo */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <div class="logo">BMW <span>PERFORMANCE</span></div>
+        <nav>
+            <a href="#showcase">السيارات</a>
+            <a href="#faq">الأسئلة الشائعة</a>
+            <a href="#contact">تواصل معنا</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>متعة القيادة المطلقة</h1>
+        <p>استكشف أحدث طرازات BMW الفاخرة المصممة بأعلى معايير الأداء والذكاء.</p>
+    </section>
+
+    <!-- Cars Showcase Section -->
+    <section id="showcase">
+        <h2 class="section-title">تشكيلة السيارات</h2>
+        <div class="controls">
+            <button class="filter-btn active" onclick="filterCars('all', event)">الكل</button>
+            <button class="filter-btn" onclick="filterCars('M', event)">فئة M الرياضية</button>
+            <button class="filter-btn" onclick="filterCars('i', event)">فئة i الكهربائية</button>
+            <button class="filter-btn" onclick="filterCars('SUV', event)">فئة X (SUV)</button>
+        </div>
+
+        <main class="cars-container" id="carsContainer">
+            <!-- Cars generated dynamically via JS -->
+        </main>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq">
+        <h2 class="section-title">الأسئلة الشائعة</h2>
+        <div class="faq-section">
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>كيف يمكنني حجز تجربة قيادة (Test Drive)؟</span>
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    يمكنك اختيار السيارة المطلوبة والضغط على زر "طلب الحجز"، أو ملء نموذج التواصل أسفل الصفحة وسيتواصل معك مستشار المبيعات فوراً.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>ما هي فترة الضمان المقدمة مع سيارات BMW الكهربائية؟</span>
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    تأتي جميع طرازات BMW i الكهربائية مع ضمان شامل على البطارية يدوم لمدة 8 سنوات أو 160,000 كم (أيهما أقرب).
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>هل تتوفر خدمة التخصيص الخاص (BMW Individual)؟</span>
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    نعم، نتيح لك اختيار الألوان الخارجية والجلد الداخلي واللمسات الخشبية أو ألياف الكربون حسب طلبك الخاص من المصنع مباشرة.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <h2 class="section-title">تواصل معنا</h2>
+        <div class="contact-section">
+            <form class="contact-form" onsubmit="handleContactSubmit(event)">
+                <div class="form-group">
+                    <label for="name">الاسم الكامل</label>
+                    <input type="text" id="name" placeholder="أدخل اسمك الكريم" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">البريد الإلكتروني</label>
+                    <input type="email" id="email" placeholder="example@domain.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="subject">الاستفسار / الطراز المطلوب</label>
+                    <input type="text" id="subject" placeholder="مثال: استفسار عن BMW M4" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">الرسالة</label>
+                    <textarea id="message" rows="4" placeholder="اكتب تفاصيل استفسارك هنا..." required></textarea>
+                </div>
+                <button type="submit" class="btn-submit">إرسال الرسالة</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>تطوير واجهة متجر BMW &copy; 2026 - جميع الحقوق محفوظة.</p>
+    </footer>
+
+    <!-- ================= JAVASCRIPT ================= -->
+    <script>
+        // Array of BMW Cars Data
+        const bmwCars = [
+            {
+                id: 1,
+                name: "BMW M4 Competition",
+                category: "M",
+                price: "$78,100",
+                power: "503 حصان",
+                accel: "0-100 كم/س في 3.8 ثانية",
+                image: "https://images.unsplash.com/photo-1681856848600-0de0515eb9fb?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fGJtdyUyMG00JTIwY29tcGV0aXRpb258ZW58MHx8MHx8fDA%3D"
+            },
+            {
+                id: 2,
+                name: "BMW i7 xDrive60",
+                category: "i",
+                price: "$105,700",
+                power: "536 حصان (كهربائي بالكامل)",
+                accel: "مدى قيادة يصل إلى 625 كم",
+                image: "https://images.unsplash.com/photo-1701985470695-e430a8fdc8d6?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Ym13JTIwaTd8ZW58MHx8MHx8fDA%3D"
+            },
+            {
+                id: 3,
+                name: "BMW X5 M Competition",
+                category: "SUV",
+                price: "$122,300",
+                power: "617 حصان",
+                accel: "دفع رباعي xDrive ذكي",
+                image: "https://images.unsplash.com/photo-1731988666894-482242ceae2f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Ym13JTIweDVtfGVufDB8fDB8fHww"
+            },
+            {
+                id: 4,
+                name: "BMW M5 CS",
+                category: "M",
+                price: "$142,000",
+                power: "627 حصان",
+                accel: "0-100 كم/س في 3.0 ثوانٍ",
+                image: "https://images.unsplash.com/photo-1603189661342-e45f1374f890?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Ym13JTIwbTUlMjBjc3xlbnwwfHwwfHx8MA%3D%3D"
+            },
+            {
+                id: 5,
+                name: "BMW iX M60",
+                category: "i",
+                price: "$111,500",
+                power: "610 حصان",
+                accel: "عزم دوران 1,100 نيوتن متر",
+                image:"https://images.pexels.com/photos/30140362/pexels-photo-30140362.jpeg"
+            },
+            {
+                id: 6,
+                name: "BMW X7 M60i",
+                category: "SUV",
+                price: "$103,100",
+                power: "523 حصان",
+                accel: "7 مقاعد فاخرة",
+                image: "https://images.pexels.com/photos/31394568/pexels-photo-31394568.jpeg"
+            }
+        ];
+
+        // Function to Display Cars
+        function displayCars(carsToRender) {
+            const container = document.getElementById("carsContainer");
+            container.innerHTML = "";
+
+            carsToRender.forEach(car => {
+                const carCard = `
+                    <div class="car-card">
+                        <img src="${car.image}" alt="${car.name}" class="car-img">
+                        <div class="car-details">
+                            <h3 class="car-title">${car.name}</h3>
+                            <ul class="car-specs">
+                                <li>⚡ القوة: ${car.power}</li>
+                                <li>🏎️ الأداء: ${car.accel}</li>
+                            </ul>
+                            <div class="price-box">
+                                <span class="price">${car.price}</span>
+                                <button class="btn-buy" onclick="orderCar('${car.name}')">طلب الحجز</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += carCard;
+            });
+        }
+
+        // Filter Cars
+        function filterCars(category, evt) {
+            const buttons = document.querySelectorAll(".filter-btn");
+            buttons.forEach(btn => btn.classList.remove("active"));
+            evt.target.classList.add("active");
+
+            if (category === "all") {
+                displayCars(bmwCars);
+            } else {
+                const filtered = bmwCars.filter(car => car.category === category);
+                displayCars(filtered);
+            }
+        }
+
+        // Toggle FAQ Accordion
+        function toggleFaq(element) {
+            const parent = element.parentElement;
+            parent.classList.toggle("active");
+        }
+
+        // Handle Contact Form Submit
+        function handleContactSubmit(event) {
+            event.preventDefault();
+            const name = document.getElementById("name").value;
+            alert(`شكراً لك يا ${name}، تم استلام رسالتك بنجاح وسيتم التواصل معك قريباً!`);
+            event.target.reset();
+        }
+
+        // Order Action
+        function orderCar(carName) {
+            alert(`شكراً لاهتمامك بـ ${carName}. سيتم توجيهك لطلب تجربة القيادة (Test Drive)!`);
+        }
+
+        // Initial Load
+        document.addEventListener("DOMContentLoaded", () => {
+            displayCars(bmwCars);
+        });
+    </script>
+</body>
+</html>
